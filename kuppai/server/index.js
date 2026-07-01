@@ -35,6 +35,7 @@ app.use(cors({
     cb(new Error(`CORS: origin ${origin} not allowed`));
   },
   credentials: true,
+  exposedHeaders: ['X-Total-Count', 'X-Page', 'X-Limit'],
 }));
 app.use(express.json({ limit: '2mb' }));
 
@@ -46,19 +47,20 @@ app.get('/api', (_req, res) => {
   res.json({ ok: true, message: 'Kuppai ERP API is running' });
 });
 
-app.use('/api/auth',       require('./features/auth/auth.routes'));
-app.use('/api/units',      require('./features/settings/units.routes'));
-app.use('/api/users',      require('./features/users/users.routes'));
-app.use('/api/suppliers',  require('./features/suppliers/suppliers.routes'));
-app.use('/api/labours',    require('./features/labours/labours.routes'));
-app.use('/api/clients',    require('./features/clients/clients.routes'));
-app.use('/api/purchases',  require('./features/purchases/purchases.routes'));
-app.use('/api/cleaning',   require('./features/operations/cleaning.routes'));
-app.use('/api/processing', require('./features/operations/processing.routes'));
-app.use('/api/inventory',  require('./features/inventory/inventory.routes'));
-app.use('/api/sales',      require('./features/sales/sales.routes'));
-app.use('/api/invoices',   require('./features/invoices/invoices.routes'));
-app.use('/api/settings',   require('./features/settings/settings.routes'));
+app.use('/api/auth',         require('./features/auth/auth.routes'));
+app.use('/api/units',        require('./features/settings/units.routes'));
+app.use('/api/users',        require('./features/users/users.routes'));
+app.use('/api/suppliers',    require('./features/suppliers/suppliers.routes'));
+app.use('/api/labours',      require('./features/labours/labours.routes'));
+app.use('/api/clients',      require('./features/clients/clients.routes'));
+app.use('/api/purchases',    require('./features/purchases/purchases.routes'));
+app.use('/api/cleaning',     require('./features/operations/cleaning.routes'));
+app.use('/api/processing',   require('./features/operations/processing.routes'));
+app.use('/api/inventory',    require('./features/inventory/inventory.routes'));
+app.use('/api/sales',        require('./features/sales/sales.routes'));
+app.use('/api/invoices',     require('./features/invoices/invoices.routes'));
+app.use('/api/settings',     require('./features/settings/settings.routes'));
+app.use('/api/transactions', require('./features/transactions/transactions.routes'));
 
 app.use((req, res, next) => {
   if (req.path.startsWith('/api/')) {

@@ -1,8 +1,17 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
 const User = require('./models/User');
 const auth = require('../../middleware/auth');
 const mailer = require('../../utils/mailer');
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // Limit each IP to 20 login requests per windowMs
+  message: { message: 'Too many login attempts from this IP, please try again after 15 minutes' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 const toUserPayload = (user) => ({
   id: user._id,
@@ -21,7 +30,7 @@ const signToken = (user) => jwt.sign(
   { expiresIn: '12h' }
 );
 
-router.post('/login', async (req, res) => {
+router.post('/login', loginLimiter, async (req, res) => {
   try {
     const { username, password } = req.body;
     if (!username || !password) {

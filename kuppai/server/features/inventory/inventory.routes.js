@@ -8,7 +8,23 @@ r.get('/', auth, async (req, res) => {
     const q = {};
     if (req.query.unitId)   q.unitId = req.query.unitId;
     if (req.query.category) q.category = req.query.category;
-    res.json(await Inventory.find(q).sort({ createdAt: -1 }));
+
+    const limit = Number(req.query.limit) || 500;
+    const page = Number(req.query.page) || 1;
+    const skip = (page - 1) * limit;
+
+    const totalCount = await Inventory.countDocuments(q);
+    const list = await Inventory.find(q).sort({ createdAt: -1 }).skip(skip).limit(limit);
+
+    res.set('X-Total-Count', totalCount);
+    res.set('X-Page', page);
+    res.set('X-Limit', limit);
+
+    if (req.query.paginated === 'true') {
+      return res.json({ data: list, total: totalCount, page, limit, pages: Math.ceil(totalCount / limit) });
+    }
+
+    res.json(list);
   } catch(e) { res.status(500).json({message:e.message}); }
 });
 r.post('/', admin, async (req, res) => {
