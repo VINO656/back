@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build": "echo \"No build step needed for backend server\""
+    "build": "npm install"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
