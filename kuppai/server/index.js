@@ -116,7 +116,8 @@ app.use('/api/processing', require('./features/operations/processing.routes'));
 app.use('/api/inventory',  require('./features/inventory/inventory.routes'));
 app.use('/api/sales',      require('./features/sales/sales.routes'));
 app.use('/api/invoices',   require('./features/invoices/invoices.routes'));
-app.use('/api/settings',   require('./features/settings/settings.routes'));
+app.use('/api/settings',     require('./features/settings/settings.routes'));
+app.use('/api/transactions', require('./features/transactions/transactions.routes'));
 
 // 8. 404 Handler for Unmatched API Routes
 app.use((req, res, next) => {
