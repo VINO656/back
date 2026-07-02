@@ -90,6 +90,18 @@ app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 app.use(hpp());
 
 // 6. Health & System Status Endpoints
+app.get('/', (_req, res) => {
+  res.json({
+    ok: true,
+    service: 'Kuppai ERP Backend API Server',
+    status: 'Running',
+    mode: 'Standalone API Server',
+    endpoints: '/api',
+    healthCheck: '/health',
+    timestamp: new Date().toISOString(),
+  });
+});
+
 app.get('/health', (_req, res) => {
   res.json({
     ok: true,
