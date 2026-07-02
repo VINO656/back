@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "cd kuppai/server && npm install",
-    "start": "cd kuppai/server && node index.js"
+    "build": "cd server && npm install",
+    "start": "cd server && node index.js"
   }
 }
