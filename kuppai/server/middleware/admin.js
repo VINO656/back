@@ -1,10 +1,15 @@
 const auth = require('./auth');
 
-module.exports = (req, res, next) => {
-  auth(req, res, () => {
-    if (req.user?.role !== 'Admin') {
-      return res.status(403).json({ message: 'Access denied. Admin role required.' });
-    }
-    next();
-  });
+/**
+ * Role-Based Authorization Check
+ * Verifies that the authenticated user holds the 'Admin' role.
+ */
+const requireAdmin = (req, res, next) => {
+  if (!req.user || req.user.role !== 'Admin') {
+    return res.status(403).json({ ok: false, message: 'Access denied. Admin privileges required.' });
+  }
+  next();
 };
+
+// Standard Express middleware composition array: runs JWT verification first, then checks role
+module.exports = [auth, requireAdmin];

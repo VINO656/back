@@ -36,6 +36,16 @@ s.pre('save', async function() {
   if (this.role === 'Admin') this.isAdmin = true;
 });
 
+s.pre('findOneAndUpdate', async function(next) {
+  const update = this.getUpdate();
+  if (update && update.password) {
+    update.password = await bcrypt.hash(update.password, 10);
+  } else if (update && update.$set && update.$set.password) {
+    update.$set.password = await bcrypt.hash(update.$set.password, 10);
+  }
+  next();
+});
+
 s.methods.matchPw = function(pw) { return bcrypt.compare(pw, this.password); };
 
 module.exports = mongoose.model('User', s);
